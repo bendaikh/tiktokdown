@@ -25,6 +25,23 @@ class ThemeServiceProvider extends ServiceProvider
         $this->theme = $theme;
         $this->themeManager = $theme->manager;
 
+        // Ensure theme assets are publicly available
+        // If the public/theme-assets symbolic link (or directory) is missing (e.g. on fresh production deploy)
+        // we try to recreate it automatically so that images and css are served correctly without requiring
+        // a separate deployment step.
+        $publicAssetsPath = public_path('theme-assets');
+        if (!file_exists($publicAssetsPath)) {
+            $sourceAssetsPath = $theme->resourcesPath('assets');
+            try {
+                // Attempt to create a symlink first (preferred – keeps filesystem lean)
+                \Illuminate\Support\Facades\File::link($sourceAssetsPath, $publicAssetsPath);
+            } catch (\Throwable $e) {
+                // Some environments (shared hosting, Windows, restrictive permissions) block symlinks.
+                // As a fallback we copy the directory so that assets are still available.
+                \Illuminate\Support\Facades\File::copyDirectory($sourceAssetsPath, $publicAssetsPath);
+            }
+        }
+
         // Load theme views
         $this->loadViewsFrom(
             $theme->resourcesPath('views'),
