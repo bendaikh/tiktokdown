@@ -39,7 +39,7 @@ class DownloadFileController extends Controller
     {
         $ch = curl_init();
         $headers = array(
-            'Range: bytes=0-',
+            
         );
         $options = array(
             CURLOPT_URL => $url,
@@ -49,7 +49,7 @@ class DownloadFileController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLINFO_HEADER_OUT => true,
             CURLOPT_USERAGENT => 'okhttp',
-            CURLOPT_ENCODING => "utf-8",
+            CURLOPT_ENCODING => "",
             CURLOPT_AUTOREFERER => true,
             CURLOPT_REFERER => 'https://www.tiktok.com/',
             CURLOPT_CONNECTTIMEOUT => 600,
