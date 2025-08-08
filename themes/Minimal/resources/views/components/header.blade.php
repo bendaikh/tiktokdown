@@ -7,7 +7,6 @@
     <nav aria-label="Main Navigation" :class="{'is-open': showNav}">
         <ul>
             <x-minimal::nav-link href="{{route('popular-videos')}}" text="Popular videos"  />
-            <x-minimal::nav-link href="{{route('how-to-save')}}" text="How to save TikTok video?"  />
         </ul>
     </nav>
     <div>
