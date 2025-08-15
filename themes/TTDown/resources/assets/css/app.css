@@ -130,67 +130,28 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.url-input {
-    width: 100%;
-    padding: 1rem 120px 1rem 1.5rem;
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    background: var(--card-bg);
-    color: var(--text-primary);
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-}
-
 .url-input:focus {
     outline: none;
-    border-color: var(--accent-blue);
+    border-color: var(--accent-blue) !important;
 }
 
 .url-input::placeholder {
     color: var(--text-muted);
 }
 
-.paste-btn {
-    position: absolute;
-    right: 90px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
 .paste-btn:hover {
-    background: var(--border-color);
-    color: var(--text-primary);
-}
-
-.download-btn {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    background: var(--border-color) !important;
+    color: var(--text-primary) !important;
 }
 
 .download-btn:hover {
-    transform: translateY(-50%) scale(1.05);
+    transform: scale(1.05);
 }
 
 .download-btn:disabled {
     opacity: 0.7;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Feature Cards */
@@ -403,16 +364,19 @@ body {
         font-size: 1rem;
     }
     
+    .download-form .form-group > div {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+    }
+    
     .url-input {
-        padding: 1rem 1rem 1rem 1.5rem;
+        padding: 1rem 1.5rem !important;
     }
     
     .paste-btn,
     .download-btn {
-        position: static;
-        transform: none;
-        width: 100%;
-        margin-top: 0.5rem;
+        width: 100% !important;
+        justify-content: center !important;
     }
     
     .nav {

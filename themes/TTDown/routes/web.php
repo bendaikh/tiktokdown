@@ -4,10 +4,15 @@ use Illuminate\Support\Facades\Route;
 use Themes\TTDown\Controllers\FetchController;
 use Themes\TTDown\Controllers\PopularVideosController;
 use Themes\TTDown\Controllers\SitemapController;
+use Themes\TTDown\Controllers\DownloadController;
 
 Route::post("fetch", FetchController::class)
     ->middleware(['web', 'auth.session'])
     ->name("fetch");
+
+Route::get("download", [DownloadController::class, 'download'])
+    ->middleware(['web'])
+    ->name("download");
 
 Route::get("/sitemap.xml", SitemapController::class)->name('sitemap');
 
