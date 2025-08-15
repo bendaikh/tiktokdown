@@ -42,6 +42,11 @@ Route::withoutMiddleware(['locale'])->group(function () {
             Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
                 ->name('settings.update');
 
+            Route::get("/ai-integration", [\App\Http\Controllers\Admin\AIIntegrationController::class, 'index'])
+                ->name('ai-integration');
+            Route::post('/ai-integration', [\App\Http\Controllers\Admin\AIIntegrationController::class, 'update'])
+                ->name('ai-integration.update');
+
             Route::get("/proxies", [\App\Http\Controllers\Admin\ProxyController::class, 'index'])
                 ->name('proxy');
             Route::get("/proxies/create", [\App\Http\Controllers\Admin\ProxyController::class, 'createForm'])
