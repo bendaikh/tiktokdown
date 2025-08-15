@@ -16,6 +16,11 @@
         text="Appearance"
     />
     <x-admin.nav-link
+        href="{{route('admin.products.index')}}"
+        icon="admin.icon.mini.shopping-bag"
+        text="Products"
+    />
+    <x-admin.nav-link
         href="{{route('admin.me')}}"
         icon="admin.icon.mini.user"
         text="My Account"
