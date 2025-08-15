@@ -67,5 +67,7 @@ Route::withoutMiddleware(['locale'])->group(function () {
             Route::get('/me', [\App\Http\Controllers\Admin\MeController::class, 'index'])
                 ->name('me');
             Route::post('/me', [\App\Http\Controllers\Admin\MeController::class, 'store']);
+
+            Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
         });
 });
