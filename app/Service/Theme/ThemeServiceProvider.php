@@ -30,16 +30,37 @@ class ThemeServiceProvider extends ServiceProvider
         // we try to recreate it automatically so that images and css are served correctly without requiring
         // a separate deployment step.
         $publicAssetsPath = public_path('theme-assets');
+        $sourceAssetsPath  = $theme->resourcesPath('assets');
+
+        // (Re)link or copy assets if the currently linked directory does not match the active theme.
+        $needsRefresh = false;
         if (!file_exists($publicAssetsPath)) {
-            $sourceAssetsPath = $theme->resourcesPath('assets');
-            try {
-                // Attempt to create a symlink first (preferred – keeps filesystem lean)
-                \Illuminate\Support\Facades\File::link($sourceAssetsPath, $publicAssetsPath);
-            } catch (\Throwable $e) {
-                // Some environments (shared hosting, Windows, restrictive permissions) block symlinks.
-                // As a fallback we copy the directory so that assets are still available.
-                \Illuminate\Support\Facades\File::copyDirectory($sourceAssetsPath, $publicAssetsPath);
+            $needsRefresh = true;
+        } elseif (is_link($publicAssetsPath)) {
+            // On most OSs readlink returns the target of the symlink (or false on failure)
+            $needsRefresh = realpath(readlink($publicAssetsPath)) !== realpath($sourceAssetsPath);
+        } else {
+            // Compare a representative file (css/app.css) checksum to detect theme switch
+            $publicCss  = $publicAssetsPath . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'app.css';
+            $sourceCss  = $sourceAssetsPath  . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'app.css';
+            if (file_exists($publicCss) && file_exists($sourceCss)) {
+                $needsRefresh = md5_file($publicCss) !== md5_file($sourceCss);
+            } else {
+                $needsRefresh = true;
             }
+        }
+
+        if ($needsRefresh) {
+            // Remove outdated link/directory first
+            if (is_link($publicAssetsPath)) {
+                // For symlinked directory simply unlink to avoid deleting real files
+                unlink($publicAssetsPath);
+            } else {
+                \Illuminate\Support\Facades\File::deleteDirectory($publicAssetsPath);
+            }
+
+            // Copy (not symlink) to ensure assets exist even on systems where symlinks are restricted.
+            \Illuminate\Support\Facades\File::copyDirectory($sourceAssetsPath, $publicAssetsPath);
         }
 
         // Load theme views
