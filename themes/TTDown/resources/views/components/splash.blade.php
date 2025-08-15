@@ -9,20 +9,23 @@
             <form id="downloadForm" action="{{ route('fetch') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <input 
-                        type="url" 
-                        name="url" 
-                        class="url-input" 
-                        placeholder="Just insert TikTok URL"
-                        required
-                        autocomplete="off"
-                    >
-                    <button type="button" class="paste-btn">
-                        📋 Paste
-                    </button>
-                    <button type="submit" class="download-btn" id="downloadBtn">
-                        Download
-                    </button>
+                    <div style="position: relative; display: flex; gap: 0.5rem;">
+                        <input 
+                            type="url" 
+                            name="url" 
+                            class="url-input" 
+                            placeholder="Just insert TikTok URL"
+                            required
+                            autocomplete="off"
+                            style="flex: 1; padding: 1rem 1.5rem; border: 2px solid var(--border-color); border-radius: 12px; background: var(--card-bg); color: var(--text-primary); font-size: 1rem;"
+                        >
+                        <button type="button" class="paste-btn" style="background: transparent; border: 2px solid var(--border-color); color: var(--text-secondary); padding: 1rem 1.5rem; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem;">
+                            📋 Paste
+                        </button>
+                        <button type="submit" class="download-btn" id="downloadBtn" style="background: var(--gradient-accent); color: white; border: none; padding: 1rem 2rem; border-radius: 12px; font-weight: 600; cursor: pointer; transition: transform 0.3s ease; white-space: nowrap;">
+                            Download
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -108,30 +111,53 @@ document.addEventListener('DOMContentLoaded', function() {
         // Download links
         let linksHtml = '<div style="display: flex; flex-direction: column; gap: 0.75rem;">';
         
+        // HD Video without watermark (primary download)
         if (video.downloads && video.downloads.length > 0) {
-            video.downloads.forEach((download, index) => {
-                const quality = download.isHD ? 'HD' : 'SD';
-                const size = download.size ? ` (${download.size})` : '';
-                
-                linksHtml += `
-                    <a href="${download.url}" 
-                       target="_blank" 
-                       style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--gradient-accent); color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.3s ease;"
-                       onmouseover="this.style.transform='scale(1.02)'"
-                       onmouseout="this.style.transform='scale(1)'">
-                        <span>📹 Download ${quality} Video${size}</span>
-                        <span>⬇️</span>
-                    </a>
-                `;
-            });
+            const hdDownload = video.downloads[0]; // First download is usually HD
+            const size = hdDownload.size ? ` (${hdDownload.size})` : '';
+            const downloadUrl = '/download?url=' + encodeURIComponent(hdDownload.url) + '&filename=tiktok-video-hd&type=video';
+            
+            linksHtml += `
+                <a href="${downloadUrl}" 
+                   style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--gradient-accent); color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.3s ease; cursor: pointer;"
+                   onmouseover="this.style.transform='scale(1.02)'"
+                   onmouseout="this.style.transform='scale(1)'">
+                    <span>📹 Download HD Video Without Watermark${size}</span>
+                    <span>⬇️</span>
+                </a>
+            `;
+        }
+        
+        // MP3 Audio download
+        if (video.music && video.music.downloadUrl) {
+            const audioDownloadUrl = '/download?url=' + encodeURIComponent(video.music.downloadUrl) + '&filename=tiktok-audio&type=audio';
+            
+            linksHtml += `
+                <a href="${audioDownloadUrl}" 
+                   style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--accent-blue); color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.3s ease; cursor: pointer;"
+                   onmouseover="this.style.transform='scale(1.02)'"
+                   onmouseout="this.style.transform='scale(1)'">
+                    <span>🎵 Download MP3 Audio</span>
+                    <span>⬇️</span>
+                </a>
+            `;
+        } else if (video.downloads && video.downloads.length > 0) {
+            // Fallback: if no MP3 URL available, show that MP3 is not available
+            linksHtml += `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--text-muted); color: var(--text-secondary); border-radius: 8px; font-weight: 500; opacity: 0.5;">
+                    <span>🎵 MP3 Audio (Not Available)</span>
+                    <span>❌</span>
+                </div>
+            `;
         }
         
         // Add watermark download if available
         if (video.watermark?.url) {
+            const watermarkDownloadUrl = '/download?url=' + encodeURIComponent(video.watermark.url) + '&filename=tiktok-video-watermark&type=watermark';
+            
             linksHtml += `
-                <a href="${video.watermark.url}" 
-                   target="_blank" 
-                   style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--border-color); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.3s ease;"
+                <a href="${watermarkDownloadUrl}" 
+                   style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--border-color); color: var(--text-primary); text-decoration: none; border-radius: 8px; font-weight: 500; transition: transform 0.3s ease; cursor: pointer;"
                    onmouseover="this.style.transform='scale(1.02)'"
                    onmouseout="this.style.transform='scale(1)'">
                     <span>💧 Download with Watermark</span>
