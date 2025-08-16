@@ -74,5 +74,12 @@ Route::withoutMiddleware(['locale'])->group(function () {
             Route::post('/me', [\App\Http\Controllers\Admin\MeController::class, 'store']);
 
             Route::resource('products', \App\Http\Controllers\Admin\ProductController::class);
+
+            // Blog routes
+            Route::resource('blogs', \App\Http\Controllers\Admin\BlogController::class);
+            Route::post('/blogs/generate-ai-content', [\App\Http\Controllers\Admin\BlogController::class, 'generateAiContent'])
+                ->name('blogs.generate-ai-content');
+            Route::post('/blogs/regenerate-content', [\App\Http\Controllers\Admin\BlogController::class, 'regenerateContent'])
+                ->name('blogs.regenerate-content');
         });
 });

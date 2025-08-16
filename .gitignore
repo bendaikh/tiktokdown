@@ -3,7 +3,6 @@
 /public/hot
 /public/storage
 /public/assets
-# /public/theme-assets
 /storage/*.key
 /release
 /release.zip

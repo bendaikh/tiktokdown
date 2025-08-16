@@ -1,46 +1,27 @@
+@php
+    use Illuminate\Support\Str;
+    $posts = \App\Models\Blog::published()->latest('published_at')->take(5)->get();
+@endphp
+
+@if($posts->count())
 <section class="blog">
     <div class="container">
-        <h2 class="section-title">From our Blog</h2>
-        
+        <h2 class="section-title">Latest Blog Posts</h2>
+
         <div class="blog-grid">
-            <div class="blog-card">
-                <div class="blog-image"></div>
-                <div class="blog-content">
-                    <h3 class="blog-title">How to get more views on TikTok</h3>
-                    <p class="blog-excerpt">
-                        A comprehensive guide to boosting your 
-                        visibility content and reach more potential 
-                        viewers on the platform.
-                    </p>
-                    <a href="#" class="read-more">Read More →</a>
-                </div>
-            </div>
-            
-            <div class="blog-card">
-                <div class="blog-image"></div>
-                <div class="blog-content">
-                    <h3 class="blog-title">Top 10 TikTok trends of the year</h3>
-                    <p class="blog-excerpt">
-                        Discover the trends that shaped the 
-                        performance and how to leverage them 
-                        and level up your content game.
-                    </p>
-                    <a href="#" class="read-more">Read More →</a>
-                </div>
-            </div>
-            
-            <div class="blog-card">
-                <div class="blog-image"></div>
-                <div class="blog-content">
-                    <h3 class="blog-title">The Art of Storytelling on TikTok</h3>
-                    <p class="blog-excerpt">
-                        Learn how to create compelling narratives 
-                        in short-form content to maximize 
-                        engagement.
-                    </p>
-                    <a href="#" class="read-more">Read More →</a>
-                </div>
-            </div>
+            @foreach($posts as $post)
+                <a href="{{ route('blog.show', $post) }}" class="blog-card">
+                    @if($post->featured_image)
+                        <div class="blog-image" style="background-image:url('{{ $post->featured_image }}')"></div>
+                    @endif
+                    <div class="blog-content">
+                        <h3 class="blog-title">{{ $post->title }}</h3>
+                        <p class="blog-excerpt">{{ Str::limit(strip_tags($post->description ?? $post->excerpt), 120) }}</p>
+                        <span class="read-more">Read More →</span>
+                    </div>
+                </a>
+            @endforeach
         </div>
     </div>
 </section>
+@endif

@@ -28,8 +28,27 @@ class AIIntegrationController extends Controller
             'ai_temperature' => 'nullable|numeric|min:0|max:2',
         ]);
 
-        // Here you would save the AI settings to your config or database
-        // For now, we'll just redirect back with success
+        /** @var \App\Service\StorableConfig $storable */
+        $storable = app('config.storable');
+        
+        // Cast temperature to float to satisfy OpenAI API expectations
+        $temperature = isset($validated['ai_temperature']) ? (float) $validated['ai_temperature'] : 0.7;
+
+        // Save AI settings to config
+        $storable->put('services.openai', [
+            'api_key' => $validated['openai_api_key'] ?? null,
+            'model' => $validated['openai_model'] ?? 'gpt-3.5-turbo',
+            'temperature' => $temperature,
+        ]);
+
+        $storable->put('ai', [
+            'enabled' => $validated['ai_enabled'] ?? false,
+            'auto_generate_descriptions' => $validated['auto_generate_descriptions'] ?? false,
+        ]);
+
+        if (!$storable->save()) {
+            return back()->withInput()->with('error', 'Failed to save AI integration settings.');
+        }
         
         return redirect()->route('admin.ai-integration')
             ->with('success', 'AI integration settings updated successfully!');

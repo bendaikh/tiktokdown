@@ -23,6 +23,21 @@
     />
     
     <x-admin.nav-dropdown 
+        text="Blog Posts" 
+        icon="admin.icon.mini.edit"
+        :open="request()->routeIs('admin.blogs*')"
+    >
+        <x-admin.nav-sub-link
+            href="{{route('admin.blogs.create')}}"
+            text="Add Blog Post"
+        />
+        <x-admin.nav-sub-link
+            href="{{route('admin.blogs.index')}}"
+            text="Manage Blog Posts"
+        />
+    </x-admin.nav-dropdown>
+    
+    <x-admin.nav-dropdown 
         text="Settings" 
         icon="admin.icon.mini.cog"
         :open="request()->routeIs('admin.settings*') || request()->routeIs('admin.ai-integration*')"

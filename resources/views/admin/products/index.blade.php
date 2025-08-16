@@ -27,12 +27,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($products as $product)
+                @foreach($products as $product)
                             <tr>
                                 <td class="product-cell">
                                     <div class="product-info">
                                         <div class="product-image">
-                                            @if($product->image_url)
+                            @if($product->image_url)
                                                 <img src="{{ $product->image_url }}" alt="{{ $product->name }}">
                                             @else
                                                 <div class="product-placeholder">📦</div>
@@ -68,7 +68,7 @@
             <div class="pagination-container">
                 {{ $products->links() }}
             </div>
-        @else
+                            @else
             <div class="empty-state">
                 <div class="empty-icon">📦</div>
                 <h3>No products yet</h3>
@@ -77,9 +77,9 @@
                     + Create Product
                 </button>
             </div>
-        @endif
-    </div>
-
+                            @endif
+                        </div>
+                        
     <!-- Edit Product Modal -->
     <div id="editProductModal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
@@ -140,9 +140,9 @@
                         <div id="current-image" style="margin-top: 10px; display: none;">
                             <small>Current image:</small><br>
                             <img id="current-image-preview" src="" style="max-width: 100px; max-height: 100px; border-radius: 4px;">
+                            </div>
                         </div>
-                    </div>
-
+                        
                     <div class="form-group">
                         <label for="edit_sort_order" class="form-label">Sort Order</label>
                         <input type="number" name="sort_order" id="edit_sort_order" class="form-input" value="0" min="0">
@@ -162,9 +162,9 @@
                     <button type="button" onclick="closeEditModal()" class="button">Cancel</button>
                     <button type="submit" class="button is-primary">Update Product</button>
                 </div>
-            </form>
-        </div>
-    </div>
+                            </form>
+                        </div>
+                    </div>
 
     <!-- Delete Confirmation Modal -->
     <div id="deleteProductModal" class="modal-overlay" style="display: none;">
@@ -258,14 +258,14 @@
                             <span class="form-checkbox-label">Active</span>
                         </label>
                     </div>
-                </div>
+            </div>
 
                 <div class="modal-footer">
                     <button type="button" onclick="closeCreateModal()" class="button">Cancel</button>
                     <button type="submit" class="button is-primary">Create Product</button>
                 </div>
             </form>
-        </div>
+            </div>
     </div>
 
     @push('styles')
