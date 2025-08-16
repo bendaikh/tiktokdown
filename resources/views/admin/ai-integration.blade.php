@@ -17,7 +17,7 @@
             <!-- AI Enable/Disable -->
             <div class="form-element">
                 <label class="checkbox">
-                    <input type="checkbox" name="ai_enabled" value="1" {{ old('ai_enabled', false) ? 'checked' : '' }}>
+                    <input type="checkbox" name="ai_enabled" value="1" {{ old('ai_enabled', config('ai.enabled', false)) ? 'checked' : '' }}>
                     <label>Enable AI Features</label>
                 </label>
                 @error('ai_enabled')
@@ -28,7 +28,7 @@
             <!-- OpenAI API Key -->
             <div class="form-element {{ $errors->has('openai_api_key') ? 'is-error' : '' }}">
                 <label>OpenAI API Key</label>
-                <input type="password" name="openai_api_key" value="{{ old('openai_api_key') }}" placeholder="sk-...">
+                <input type="password" name="openai_api_key" value="{{ old('openai_api_key', config('services.openai.api_key')) }}" placeholder="sk-...">
                 @error('openai_api_key')
                     <div class="error">{{ $message }}</div>
                 @enderror
@@ -41,9 +41,9 @@
             <div class="form-element {{ $errors->has('openai_model') ? 'is-error' : '' }}">
                 <label>OpenAI Model</label>
                 <select name="openai_model">
-                    <option value="gpt-3.5-turbo" {{ old('openai_model', 'gpt-3.5-turbo') == 'gpt-3.5-turbo' ? 'selected' : '' }}>GPT-3.5 Turbo (Recommended)</option>
-                    <option value="gpt-4" {{ old('openai_model') == 'gpt-4' ? 'selected' : '' }}>GPT-4 (More Advanced)</option>
-                    <option value="gpt-4-turbo" {{ old('openai_model') == 'gpt-4-turbo' ? 'selected' : '' }}>GPT-4 Turbo (Latest)</option>
+                    <option value="gpt-3.5-turbo" {{ old('openai_model', config('services.openai.model', 'gpt-3.5-turbo')) == 'gpt-3.5-turbo' ? 'selected' : '' }}>GPT-3.5 Turbo (Recommended)</option>
+                    <option value="gpt-4" {{ old('openai_model', config('services.openai.model')) == 'gpt-4' ? 'selected' : '' }}>GPT-4 (More Advanced)</option>
+                    <option value="gpt-4-turbo" {{ old('openai_model', config('services.openai.model')) == 'gpt-4-turbo' ? 'selected' : '' }}>GPT-4 Turbo (Latest)</option>
                 </select>
                 @error('openai_model')
                     <div class="error">{{ $message }}</div>
@@ -53,9 +53,9 @@
             <!-- AI Temperature -->
             <div class="form-element {{ $errors->has('ai_temperature') ? 'is-error' : '' }}">
                 <label>AI Creativity Level</label>
-                <input type="range" name="ai_temperature" min="0" max="2" step="0.1" value="{{ old('ai_temperature', '0.7') }}" 
+                <input type="range" name="ai_temperature" min="0" max="2" step="0.1" value="{{ old('ai_temperature', config('services.openai.temperature', 0.7)) }}" 
                        oninput="this.nextElementSibling.textContent = this.value">
-                <span style="margin-left: 1rem; font-weight: 600;">{{ old('ai_temperature', '0.7') }}</span>
+                <span style="margin-left: 1rem; font-weight: 600;">{{ old('ai_temperature', config('services.openai.temperature', 0.7)) }}</span>
                 @error('ai_temperature')
                     <div class="error">{{ $message }}</div>
                 @enderror
@@ -67,7 +67,7 @@
             <!-- Auto Generate Descriptions -->
             <div class="form-element">
                 <label class="checkbox">
-                    <input type="checkbox" name="auto_generate_descriptions" value="1" {{ old('auto_generate_descriptions', false) ? 'checked' : '' }}>
+                    <input type="checkbox" name="auto_generate_descriptions" value="1" {{ old('auto_generate_descriptions', config('ai.auto_generate_descriptions', false)) ? 'checked' : '' }}>
                     <label>Auto-generate Product Descriptions</label>
                 </label>
                 @error('auto_generate_descriptions')
@@ -102,6 +102,17 @@
                         </div>
                         <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
                             Optimize existing content for better engagement and search engine visibility.
+                        </p>
+                    </div>
+
+                    <!-- Blog Post Generation -->
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; background: #f9fafb;">
+                        <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.5rem; margin-right: 0.5rem;">📝</span>
+                            <h4 style="margin: 0; color: #1f2937;">AI Blog Posts</h4>
+                        </div>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0;">
+                            Generate complete, engaging blog posts from simple prompts to boost your content marketing.
                         </p>
                     </div>
 

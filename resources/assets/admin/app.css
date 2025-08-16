@@ -721,3 +721,27 @@ body, html {
     font-weight: 700;
     line-height: 1;
 }
+
+/* --------------------------------------------------------------------------
+   Fix misalignment of top-level dropdown items in the sidebar navigation
+   -------------------------------------------------------------------------- */
+.nav .nav-dropdown {
+    /* Ensure the dropdown container takes the full available width so its
+       toggle button starts at the same horizontal position as regular links */
+    width: 100%;
+}
+
+.nav .nav-dropdown-toggle {
+    /* Match the left-hand padding of regular top-level .nav-link items */
+    padding-left: 0.63rem;
+}
+
+/* Align content inside dropdown toggle similar to regular nav links */
+.nav .nav-dropdown-toggle {
+    justify-content: flex-start; /* place icon + label together */
+}
+
+/* Remove the 100% width on the label inside dropdown toggles to avoid extra gap */
+.nav .nav-dropdown-toggle span {
+    width: auto;
+}
