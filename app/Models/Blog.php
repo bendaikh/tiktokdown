@@ -38,13 +38,13 @@ class Blog extends Model
         parent::boot();
         
         static::creating(function ($blog) {
-            if (empty($blog->slug)) {
+            if (empty($blog->slug) && !empty($blog->title)) {
                 $blog->slug = Str::slug($blog->title);
             }
         });
 
         static::updating(function ($blog) {
-            if ($blog->isDirty('title') && empty($blog->slug)) {
+            if ($blog->isDirty('title') && (empty($blog->slug) || $blog->slug === Str::slug($blog->getOriginal('title')))) {
                 $blog->slug = Str::slug($blog->title);
             }
         });

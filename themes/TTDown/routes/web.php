@@ -19,6 +19,9 @@ Route::get("/sitemap.xml", SitemapController::class)->name('sitemap');
 Route::middleware(['web', 'theme'])->group(function () {
     Route::view('/tos', "theme::tos")->name('tos');
     Route::view('/privacy', "theme::privacy")->name('privacy');
+    
+    // Blog post route - outside localization group
+    Route::get('/blog/{slug}', \Themes\TTDown\Controllers\BlogPostController::class)->name('blog.show');
 });
 
 Route::localization()->middleware(['web', 'theme'])->group(function () {
@@ -30,7 +33,4 @@ Route::localization()->middleware(['web', 'theme'])->group(function () {
     Route::view('/faq', "theme::faq")->name('faq');
     Route::view('/how-to-save', "theme::how-to-save")->name('how-to-save');
     Route::get('/popular-videos', PopularVideosController::class)->name('popular-videos');
-
-    // Blog post route
-    Route::get('/blog/{slug}', \Themes\TTDown\Controllers\BlogPostController::class)->name('blog.show');
 });

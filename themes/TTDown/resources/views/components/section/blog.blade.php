@@ -10,7 +10,7 @@
 
         <div class="blog-grid">
             @foreach($posts as $post)
-                <a href="{{ route('blog.show', $post) }}" class="blog-card">
+                <a href="/blog/{{ $post->slug }}" class="blog-card">
                     @if($post->featured_image)
                         <div class="blog-image" style="background-image:url('{{ $post->featured_image }}')"></div>
                     @endif
